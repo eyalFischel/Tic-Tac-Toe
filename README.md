@@ -45,4 +45,4 @@ If I had more time, I would have:
 * Analyzed potential time and memory complexity problems
 * Would have added users stats APIs
 
-# Feel free to play with it locally or use the API from tictractoe.com :)
+# Feel free to play with it locally (port 8000) or use the API from tictractoe.com:8000 (port 8000) :)
