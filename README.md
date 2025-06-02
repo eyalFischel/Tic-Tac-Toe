@@ -43,6 +43,6 @@ If I had more time, I would have:
 * Written automated tests
 * Looked for additional bugs and potential issues
 * Analyzed potential time and memory complexity problems
-* WOuld have added users stats APIs
+* Would have added users stats APIs
 
 # Feel free to play with it locally or use the API from tictractoe.com :)

@@ -1,5 +1,6 @@
 import redis.asyncio as redis
 
+
 class RedisManager:
     def __init__(self, redis_url: str = "redis://localhost:6379"):
         self.redis = redis.from_url(redis_url, decode_responses=True)
@@ -18,6 +19,6 @@ class RedisManager:
 
     async def close(self):
         await self.redis.close()
-    
+
     async def get_all_keys(self):
         return await self.redis.keys("*")

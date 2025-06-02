@@ -31,9 +31,9 @@ test:
 
 .PHONY: static-checks
 static-checks:
-	$(PYTHON) -m flake8 . --exclude=.venv,conviction_rules.py
-	$(PYTHON) -m pylint . --ignore=.venv --ignore-patterns=conviction_rules.py --rcfile pylint.rc
-	$(PYTHON) -m black . --check --exclude '/(\.venv|conviction_rules\.py)/'
+	$(PYTHON) -m flake8 . --exclude=.venv
+	$(PYTHON) -m pylint . --ignore=.venv --rcfile pylint.rc
+	$(PYTHON) -m black . --check --exclude '/(\.venv)/'
 
 .PHONY: reformat
 reformat:

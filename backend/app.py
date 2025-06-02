@@ -46,9 +46,11 @@ class GameState(BaseModel):
 
 """
 
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Tic-Tac-Toe API!"}
+
 
 @app.get("/help")
 async def help():
@@ -62,9 +64,10 @@ async def help():
             "/rooms/create": "Create a new game room",
             "/rooms/{room_id}/join": "Join a game room",
             "/rooms/{room_id}/leave": "Leave a game room",
-            "/rooms/{room_id}/play": "Make a move in the game"
-        }
+            "/rooms/{room_id}/play": "Make a move in the game",
+        },
     }
+
 
 @app.get("/rooms/{room_id}")
 async def get_game_state(room_id: str):
@@ -76,10 +79,11 @@ async def get_game_state(room_id: str):
     except Exception as error:
         return {"Error while fetching game state": str(error)}, 500
 
+
 @app.get("/rooms")
 async def get_all_rooms():
     try:
-        keys = await redis.get_all_keys()  
+        keys = await redis.get_all_keys()
         rooms = []
         for key in keys:
             game_state = await redis.get(key)
@@ -88,6 +92,7 @@ async def get_all_rooms():
         return {"rooms": rooms}
     except Exception as error:
         return {"Error while fetching rooms": str(error)}, 500
+
 
 @app.post("/rooms/create")
 async def create_room(room_id: str):
@@ -100,33 +105,35 @@ async def create_room(room_id: str):
     except Exception as error:
         return {"Error while creating room": str(error)}, 500
 
+
 @app.post("/rooms/{room_id}/join")
 async def join_room(room_id: str, player: Player):
     try:
         if not await redis.exists(room_id):
             return {"error": "Room does not exist"}, 404
-        
+
         game_state_json = await redis.get(room_id)
         game_state = GameState.model_validate_json(game_state_json)
 
         game_state.add_player(player)
         await redis.set(room_id, game_state.model_dump_json())
-        
+
         return {"message": "Player joined successfully", "room_id": room_id}
     except ValueError as ve:
         return {"ValueError error": str(ve)}, 400
     except Exception as error:
         return {"Error while joining room": str(error)}, 500
 
+
 @app.post("/rooms/{room_id}/leave")
 async def leave_room(room_id: str, nickname: str):
     try:
         if not await redis.exists(room_id):
             return {"error": "Room does not exist"}, 404
-        
+
         game_state_json = await redis.get(room_id)
         game_state = GameState.model_validate_json(game_state_json)
-        
+
         if nickname in game_state.players:
             del game_state.players[nickname]
             await redis.set(room_id, game_state.model_dump_json())
@@ -135,31 +142,45 @@ async def leave_room(room_id: str, nickname: str):
     except Exception as error:
         return {"Error while leaving room": str(error)}, 500
 
+
 @app.post("/rooms/{room_id}/play")
 async def play_move(room_id: str, play: Play):
     try:
         if not await redis.exists(room_id):
             return {"error": "Room does not exist"}, 404
-        
+
         game_state_json = await redis.get(room_id)
         game_state = GameState.model_validate_json(game_state_json)
-        
+
         game_state.play(play)
         status = game_state.check_status_game()
 
         if status["status"] == "win":
             game_state.reset()  # Reset the game state after a win
-            return {"message": "Game over, resetting the game", "room_id": room_id, "winner": play.nickname}
+            return {
+                "message": "Game over, resetting the game",
+                "room_id": room_id,
+                "winner": play.nickname,
+            }
         elif status["status"] == "draw":
             game_state.reset()
-            return {"message": "Game over, it's a draw, resetting the game", "room_id": room_id}
-        elif status["status"] == "ongoing":  
+            return {
+                "message": "Game over, it's a draw, resetting the game",
+                "room_id": room_id,
+            }
+        elif status["status"] == "ongoing":
             await redis.set(room_id, game_state.model_dump_json())
-            return {"message": "Move played successfully", "room_id": room_id, "board": game_state.board}
-        
+            return {
+                "message": "Move played successfully",
+                "room_id": room_id,
+                "board": game_state.board,
+            }
+
     except Exception as error:
         return {"Error while playing move": str(error)}, 500
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
