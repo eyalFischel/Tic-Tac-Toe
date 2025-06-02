@@ -62,8 +62,7 @@ async def help():
             "/rooms/create": "Create a new game room",
             "/rooms/{room_id}/join": "Join a game room",
             "/rooms/{room_id}/leave": "Leave a game room",
-            "/rooms/{room_id}/play": "Make a move in the game",
-            "/stats/{nickname}": "Get player statistics"
+            "/rooms/{room_id}/play": "Make a move in the game"
         }
     }
 

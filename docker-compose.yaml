@@ -13,13 +13,3 @@ services:
     restart: on-failure 
     depends_on:
       - redis
-
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: dockers/frontend.dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   restart: on-failure
-  #   depends_on:
-  #     - backend
