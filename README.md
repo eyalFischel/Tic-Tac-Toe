@@ -8,7 +8,7 @@ This project is a real-time multiplayer **Tic-Tac-Toe (X and O)** game that allo
 
 - 🔁 Real-time multiplayer gameplay
 - 🎮 Classic 3x3 Tic-Tac-Toe logic
-- 🐍 Backend: FastAPI (Python) with WebSocket support
+- 🐍 Backend: FastAPI (Python)
 - 🌐 Cross-browser play — no login required
 
 ---
